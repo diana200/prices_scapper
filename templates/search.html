@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Search Products{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4 text-center">🔍 Search Products</h2>
+
+<form method="GET" action="/search">
+    <div class="input-group mb-4">
+        <input type="text" name="q" class="form-control" placeholder="Enter product name..." value="{{ request.args.get('q', '') }}">
+        <button class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+{% if products %}
+    {% for product in products %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4>{{ product.name }}</h4>
+                <!-- <p class="text-muted">Category: {{ product.category or "Unknown" }}</p> -->
+
+                <h5 class="mt-4">Offers</h5>
+
+                {% for offer in product.offers %}
+                    <div class="border rounded p-3 mb-3">
+                        <h6>Store: {{ offer.seller }}</h6>
+                        <p>Price: <strong>{{ offer.price }} lei</strong></p>
+
+                        <!-- <span class="text-danger">Out of stock</span> -->
+                        <!-- <span class="text-success">In stock</span> -->
+
+                        <p>{{ offer.stock_status }}</p>
+
+                        <a href="{{ offer.url }}" target="_blank" rel="noopener noreferrer"
+                           class="btn btn-outline-secondary btn-sm">View Offer</a>
+
+                        <!--
+                        <a href="/products/{{ product.product_id }}/offers/{{ offer.offer_id }}/history"
+                           class="btn btn-outline-secondary btn-sm">View History</a>
+
+                        <a href="/alerts/new?product_id={{ product.product_id }}&product_name={{product.name}}&&store={{ offer.store }}"
+                           class="btn btn-outline-primary btn-sm">Set Alert</a>
+
+                           -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center text-muted">No products found.</p>
+{% endif %}
+
+{% endblock %}

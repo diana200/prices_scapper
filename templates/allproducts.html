@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} Product from database{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Products ({{ nr_products }})</h2>
+
+{% if products %}
+
+    {% for product in products %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4>{{ product.name }}</h4>
+
+                <h5 class="mt-4">Offers</h5>
+
+                {% for offer in product.offers %}
+                    <div class="border rounded p-3 mb-3">
+                        <h6>Store: {{ offer.store }}</h6>
+                        <p>Price: <strong>{{ offer.price }} lei</strong></p>
+
+                        {% if offer.available %}
+                            <p>Status: <span class="text-success">In stock</span></p>
+                        {% else %}
+                            <p>Status: <span class="text-danger">Out of stock</span></p>
+                        {% endif %}
+
+                        <a href="{{ offer.url }}" target="_blank"
+                           class="btn btn-outline-secondary btn-sm">View Offer</a>
+
+                        <a href="/products/{{ product.product_id }}/offers/{{ offer.offer_id }}/history"
+                           class="btn btn-outline-secondary btn-sm">View History</a>
+
+                        <a href="/alerts/new?product_id={{ product.product_id }}&product_name={{product.name}}&&store={{ offer.store }}"
+                           class="btn btn-outline-primary btn-sm">Set Alert</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center text-muted">No products found.</p>
+{% endif %}
+
+<p>
+    <a href="/search" class="btn btn-secondary">Back to Search</a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Price History{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4 text-center">📈 Price History</h2>
+
+<h4>{{ product.name }}</h4>
+<p class="text-muted">Product ID: {{ product.product_id }}</p>
+
+{% for entry in history %}
+    <div class="border rounded p-3 mb-3">
+        <p>Date: <strong>{{ entry.timestamp }}</strong></p>
+        <p>Price: <strong>{{ entry.price }} lei</strong></p>
+
+        {% if entry.available %}
+            <p>Status: <span class="text-success">In stock</span></p>
+        {% else %}
+            <p>Status: <span class="text-danger">Out of stock</span></p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+<a href="/products/{{ product.product_id }}" class="btn btn-secondary">Back to Product</a>
+
+{% endblock %}
