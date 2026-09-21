@@ -1,4 +1,3 @@
-
 import string
 from repositories.alert_repo import get_alerts
 

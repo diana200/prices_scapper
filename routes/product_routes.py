@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from services.scraper_service import scrape_products
 from services.product_service import upsert_offer, upsert_product
-from repositories.product_repo import all_products, nr_products
+from repositories.product_repo import all_products, count_products
 import traceback
 
 product_bp = Blueprint("products", __name__)
@@ -11,7 +11,7 @@ product_bp = Blueprint("products", __name__)
 @product_bp.route("/dbproducts")
 def dbproducts_page():
     products = all_products()
-    nr = nr_products()
+    nr = count_products()
     return render_template("allproducts.html", products=products, nr_products = nr)
 
 @product_bp.route("/search")

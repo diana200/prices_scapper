@@ -44,34 +44,36 @@ def scrape_products(productName: string = "iphone", country: string = 'ro', numb
 
         params = {
             "q":productName,
-            "country":country,
-            "limit":number_offers
+            "market":country,
+            "limit":number_offers,
+            'offers_limit': number_offers
         }
 
         headers = {
             "x-api-key":API_KEY
         }
 
+        response_data = request_data(API_URL, params, headers)
         # supports only 6 requests per minute
-        response = requests.get(
-            url=API_URL,
-            params=params,
-            headers=headers
-        )
-
-        if response.status_code == 200:
-            data = response.json()
-
-            if data["data"] and data["data"]["products"]:
-                print("nr products: ", len(data["data"]["products"]))
-                response_data = {
-                    "products": data["data"]["products"]
-                }
-        # elif response.status_code == 503:
-        #     retry_after = int(response.headers.get("Retry-After", 5))
-        #     time.sleep(retry_after)
-        else:
-            print("ScrapeService - Error while requesting products!\n Http status code: ", response.status_code)
+        # response = requests.get(
+        #     url=API_URL,
+        #     params=params,
+        #     headers=headers
+        # )
+        #
+        # if response.status_code == 200:
+        #     data = response.json()
+        #
+        #     if data["data"] and data["data"]["products"]:
+        #         print("nr products: ", len(data["data"]["products"]))
+        #         response_data = {
+        #             "products": data["data"]["products"]
+        #         }
+        # # elif response.status_code == 503:
+        # #     retry_after = int(response.headers.get("Retry-After", 5))
+        # #     time.sleep(retry_after)
+        # else:
+        #     print("ScrapeService - Error while requesting products!\n Http status code: ", response.status_code)
 
     return response_data
 

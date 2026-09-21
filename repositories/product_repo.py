@@ -10,18 +10,31 @@ from models.product import Product
 
 
 def find_product_by_id(product_id: string):
-    p_id = str(product_id).lower()
-    if product_id and len(p_id) > 0 and p_id != "null" and p_id != "none":
-        return products.find_one({"pid": product_id})
-    else:
-        return None
+    try:
+        if product_id and len(str(product_id)) > 0:
+            p_id = str(product_id).lower()
+            if product_id and len(p_id) > 0 and p_id != "null" and p_id != "none":
+                return products.find_one({"pid": product_id})
+
+    except Exception as ex:
+        print("Exception in find_product_by_id: ", ex)
+        traceback.print_exc()
+
+    return None
 
 def find_product_by_gpcid(product_gpcid: string):
-    p_gpcid = str(product_gpcid).lower()
-    if product_gpcid and len(p_gpcid) > 0 and p_gpcid != "null"  and p_gpcid != "none":
-        return products.find_one({"gpcid": product_gpcid})
-    else:
-        return None
+    try:
+        if product_gpcid and len(str(product_gpcid)) > 0:
+            p_gpcid = str(product_gpcid).lower()
+            if product_gpcid and len(p_gpcid) > 0 and p_gpcid != "null"  and p_gpcid != "none":
+                return products.find_one({"gpcid": product_gpcid})
+
+    except Exception as ex:
+        print("Exception in find_product_by_gpcid: ", ex)
+        traceback.print_exc()
+
+    return None
+
 
 def find_product_by_name(name: string):
     if name and len(name) > 0:
@@ -33,7 +46,7 @@ def all_products():
     found_prods = products.find()
     return found_prods
 
-def nr_products():
+def count_products():
     found_prods = products.find()
     nr_products = len(list(found_prods))
     return nr_products
@@ -61,15 +74,15 @@ def create_product(product : Product):
 
 def update_offer(product_data:object, offer: Offer):
     if product_data and offer:
-        product_found = find_product_by_id(product_data["pid"])
+        product_found = find_product_by_id(product_data.get("pid"))
         if not product_found:
-            product_found = find_product_by_gpcid(product_data["gpcid"])
+            product_found = find_product_by_gpcid(product_data.get("gpcid"))
 
         if product_found:
             products.update_one(
                 {
-                    "pid": product_data["pid"],
-                    "gpcid": product_data["gpcid"],
+                    "pid": product_data.get("pid"),
+                    "gpcid": product_data.get("gpcid"),
                     "offers.seller": offer.seller  # find product + offer by seller name
                 },
                 {
@@ -87,13 +100,25 @@ def add_offer(product_data:object, offer: Offer):
     try:
         if product_data and offer:
 
-            product_found = find_product_by_id(product_data["pid"])
+            product_found = find_product_by_id(product_data.get("pid"))
             if not product_found:
-                product_found = find_product_by_gpcid(product_data["gpcid"])
+                product_found = find_product_by_gpcid(product_data.get("gpcid"))
 
             if product_found:
+
+                filterObject = {}
+                if product_data.get("pid") and product_data.get("gpcid"):
+                    filterObject = {"pid": product_data["pid"], "gpcid": product_data["gpcid"]}
+                elif product_data.get("pid"):
+                    filterObject = {"pid": product_data["pid"]}
+                elif product_data.get("gpcid"):
+                    filterObject = {"gpcid": product_data["gpcid"]}
+                else:
+                    print("Offers were not updated!")
+                    return None
+
                 products.update_one(
-                    {"pid": product_data["pid"], "gpcid": product_data["gpcid"]},  # filter
+                    filterObject,  # filter
                     {"$push": {
                         "offers": {
                             "offer_id": offer.offer_id,

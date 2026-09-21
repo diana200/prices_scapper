@@ -1,3 +1,5 @@
+# from models.offer_history import OfferHistory
+# from repositories.history_repo import add_history
 from datetime import datetime
 
 from models.offer_history import OfferHistory

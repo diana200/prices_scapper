@@ -10,12 +10,12 @@ API_KEY = os.getenv("PRICES_API_KEY")
 
 # print(API_KEY)
 
-# if not MONGO_URI:
-#     print("env data was not loaded!")
-#     MONGO_URI = "mongodb://localhost:27017"
-#
-# if not DB_NAME:
-#     DB_NAME = "price_scaper"
+if not MONGO_URI:
+    print("env data was not loaded!")
+    MONGO_URI = "mongodb://localhost:27017"
+
+if not DB_NAME:
+    DB_NAME = "price_scaper"
 
 
 client = MongoClient(MONGO_URI)
