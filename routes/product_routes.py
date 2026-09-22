@@ -16,11 +16,13 @@ def dbproducts_page():
 
 @product_bp.route("/search")
 def search_page():
+    html_products = []
+
     try:
+        products = []
+
         q = request.args.get("q")
         print(f'search: {q}')
-        products = []
-        html_products = []
 
         if q:
             products = scrape_products(q)["products"]
@@ -40,7 +42,6 @@ def search_page():
 
     return render_template("search.html", products=html_products)
 
-    return render_template("search.html", products=products)
 #return render_template("error.html", message="Product not found")
 
 

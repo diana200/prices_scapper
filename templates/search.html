@@ -18,6 +18,11 @@
             <div class="card-body">
                 <h4>{{ product.name }}</h4>
                 <!-- <p class="text-muted">Category: {{ product.category or "Unknown" }}</p> -->
+                {% if product.imgURL %}
+                <div class="d-flex justify-content-center">
+                    <img src="{{ product.imgURL }}" class="img-fluid" alt="Product image">
+                </div>
+                {% endif %}
 
                 <h5 class="mt-4">Offers</h5>
 
